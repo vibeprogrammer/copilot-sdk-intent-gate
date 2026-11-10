@@ -1,0 +1,359 @@
+{
+  "_note": "Real intent-agent v1.1.0 answers (model gemini-3.5-flash-lite) recorded on 2026-11-10 during scripts/run_demo.py, keyed by caller and the gate's rendered prompt. Used by tests/test_e2e_recorded.py so CI needs no model, no key and no IndyKite tenant.",
+  "recordings": [
+    {
+      "subject_type": "Customer",
+      "subject_id": "alice",
+      "prompt": "Transfer 500 NOK from Account acc-alice-savings to Account acc-carol-checking",
+      "evaluations": [
+        {
+          "action": {
+            "name": "TRANSFER_FROM_ACCOUNT"
+          },
+          "context": {
+            "parameters": {
+              "amount": "500 NOK",
+              "target_account": "acc-carol-checking"
+            }
+          },
+          "resource": {
+            "id": "acc-alice-savings",
+            "type": "Account"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "alice"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "alice",
+      "prompt": "Transfer 500.00 NOK from Account acc-alice-savings to Account acc-carol-checking",
+      "evaluations": [
+        {
+          "action": {
+            "name": "TRANSFER_FROM_ACCOUNT"
+          },
+          "context": {
+            "parameters": {
+              "amount": "500.00",
+              "target_account": "acc-carol-checking"
+            }
+          },
+          "resource": {
+            "id": "acc-alice-savings",
+            "type": "Account"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "alice"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "alice",
+      "prompt": "View Invoice inv-alice-0412",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_INVOICE"
+          },
+          "context": {
+            "parameters": {}
+          },
+          "resource": {
+            "id": "inv-alice-0412",
+            "type": "Invoice"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "alice"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "alice",
+      "prompt": "View Invoice inv-alice-0420",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_INVOICE"
+          },
+          "context": {
+            "parameters": {}
+          },
+          "resource": {
+            "id": "inv-alice-0420",
+            "type": "Invoice"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "alice"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "alice",
+      "prompt": "View the balance of Account acc-alice-savings",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_ACCOUNT_BALANCE"
+          },
+          "resource": {
+            "id": "acc-alice-savings",
+            "type": "Account"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "alice"
+          },
+          "context": {
+            "parameters": {}
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "alice",
+      "prompt": "View the customer profile of Customer alice",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_CUSTOMER_PROFILE"
+          },
+          "context": {
+            "parameters": {}
+          },
+          "resource": {
+            "id": "alice",
+            "type": "Customer"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "alice"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "bob",
+      "prompt": "Transfer 100.00 NOK from Account acc-bob-checking to Account acc-alice-bob-joint",
+      "evaluations": [
+        {
+          "action": {
+            "name": "TRANSFER_FROM_ACCOUNT"
+          },
+          "resource": {
+            "id": "acc-bob-checking",
+            "type": "Account"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "bob"
+          },
+          "context": {
+            "parameters": {}
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "bob",
+      "prompt": "View the balance of Account acc-alice-bob-joint",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_ACCOUNT_BALANCE"
+          },
+          "resource": {
+            "id": "acc-alice-bob-joint",
+            "type": "Account"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "bob"
+          },
+          "context": {
+            "parameters": {}
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "bob",
+      "prompt": "View the balance of Account acc-alice-savings",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_ACCOUNT_BALANCE"
+          },
+          "context": {
+            "parameters": {}
+          },
+          "resource": {
+            "id": "acc-alice-savings",
+            "type": "Account"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "bob"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "bob",
+      "prompt": "View the balance of Account acc-bob-checking",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_ACCOUNT_BALANCE"
+          },
+          "resource": {
+            "id": "acc-bob-checking",
+            "type": "Account"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "bob"
+          },
+          "context": {
+            "parameters": {}
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "bob",
+      "prompt": "View the customer profile of Customer bob",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_CUSTOMER_PROFILE"
+          },
+          "context": {
+            "parameters": {}
+          },
+          "resource": {
+            "id": "bob",
+            "type": "Customer"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "bob"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "carol",
+      "prompt": "Transfer 500 NOK from Account acc-alice-savings to Account acc-carol-checking",
+      "evaluations": [
+        {
+          "action": {
+            "name": "TRANSFER_FROM_ACCOUNT"
+          },
+          "context": {
+            "parameters": {
+              "amount": "500 NOK",
+              "target_account": "acc-carol-checking"
+            }
+          },
+          "resource": {
+            "id": "acc-alice-savings",
+            "type": "Account"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "carol"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "carol",
+      "prompt": "View Invoice inv-carol-0291",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_INVOICE"
+          },
+          "context": {
+            "parameters": {}
+          },
+          "resource": {
+            "id": "inv-carol-0291",
+            "type": "Invoice"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "carol"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "carol",
+      "prompt": "View the balance of Account acc-alice-savings",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_ACCOUNT_BALANCE"
+          },
+          "context": {
+            "parameters": {}
+          },
+          "resource": {
+            "id": "acc-alice-savings",
+            "type": "Account"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "carol"
+          }
+        }
+      ]
+    },
+    {
+      "subject_type": "Customer",
+      "subject_id": "carol",
+      "prompt": "View the customer profile of Customer alice",
+      "evaluations": [
+        {
+          "action": {
+            "name": "VIEW_CUSTOMER_PROFILE"
+          },
+          "context": {
+            "parameters": {}
+          },
+          "resource": {
+            "id": "alice",
+            "type": "Customer"
+          },
+          "subject": {
+            "type": "Customer",
+            "id": "carol"
+          }
+        }
+      ]
+    }
+  ]
+}
