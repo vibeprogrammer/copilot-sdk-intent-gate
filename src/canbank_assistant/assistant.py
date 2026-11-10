@@ -25,16 +25,12 @@ Use the tools to look things up; keep answers short."""
 
 
 def build_gate(settings: Settings) -> IntentGate:
-    headers: dict[str, str] = {}
-    if settings.pdp_client_key:  # IndyKite's AuthZEN endpoints take the AppAgent credentials token here
-        headers["X-IK-ClientKey"] = settings.pdp_client_key
-    if settings.pdp_token:  # optional user access token, for policies that read token claims
-        headers["Authorization"] = f"Bearer {settings.pdp_token}"
+    # Any AuthZEN 1.0 PDP: the stand-in, IndyKite, OpenFGA or another engine (PDP_KIND, see intent_gate.pdp).
     return IntentGate(
         intent_agent_url=settings.intent_agent_url,
         intent_agent_token=settings.intent_agent_token,
-        pdp_url=settings.pdp_url,
-        pdp_headers=headers,
+        pdp_url=settings.pdp.url,
+        pdp_headers=settings.pdp.headers,
         tools=TOOL_INTENTS,
         timeout_seconds=settings.gate_timeout_seconds,
     )

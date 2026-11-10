@@ -130,7 +130,7 @@ async def run_all(
                         "reply": None,
                         "error": f"{type(exc).__name__}: {exc}",
                     }
-                rec.update({"scenario": sc["id"], "kind": sc["kind"], "repeat": i})
+                rec.update({"scenario": sc["id"], "kind": sc["kind"], "repeat": i, "pdp": settings.pdp.kind})
                 rec["score"] = score(rec)
                 rec["score"]["injected_effect_executed"] = injected_effect_executed(rec, sc.get("injected_effect"))
                 if sc["kind"] == "control":
@@ -222,6 +222,7 @@ def main() -> None:
     p.add_argument("--only", nargs="*", help="scenario ids")
     p.add_argument("--mode", choices=["both", "gate", "none"], default="both")
     p.add_argument("--out", type=Path, default=ROOT / "results")
+    p.add_argument("--label", default="", help="added to the output file names, e.g. openfga")
     a = p.parse_args()
     scenarios = json.loads((ROOT / "scenarios" / "scenarios.json").read_text())["scenarios"]
     if a.only:
@@ -232,10 +233,11 @@ def main() -> None:
     records = asyncio.run(run_all(settings, scenarios, a.repeats, a.concurrency, modes))
     records.sort(key=lambda r: (r["scenario"], r["gated"], r["repeat"]))
     a.out.mkdir(parents=True, exist_ok=True)
-    stamp = started.strftime("%Y-%m-%d")
+    stamp = started.strftime("%Y-%m-%d") + (f"-{a.label}" if a.label else "")
     (a.out / f"transcripts-{stamp}.jsonl").write_text("".join(json.dumps(r) + "\n" for r in records))
     md = (
-        f"# Results, {started:%Y-%m-%d %H:%M} UTC\n\nModel: `{settings.model}`; repeats per scenario and mode: "
+        f"# Results, {started:%Y-%m-%d %H:%M} UTC\n\nModel: `{settings.model}`; decision engine (PDP): "
+        f"{settings.pdp.describe()}; repeats per scenario and mode: "
         f"{a.repeats}; scenarios: {len(scenarios)}.\n\n{table(records)}\n\n## Per scenario\n\n{per_scenario(records)}\n"
     )
     (a.out / f"results-{stamp}.md").write_text(md)

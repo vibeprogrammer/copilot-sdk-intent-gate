@@ -1,0 +1,114 @@
+# OpenFGA store file: the demo model, the demo graph as tuples, and checks.
+# Run with the OpenFGA CLI:  fga model test --tests pdp/openfga/store.fga.yaml
+# The tuples must equal scripts/openfga_setup.py demo_tuples() (tests/test_pdp.py checks it).
+name: canbank-demo
+model_file: ./model.fga
+tuples:
+  - user: "Customer:alice"
+    relation: identity
+    object: "Customer:alice"
+  - user: "Customer:bob"
+    relation: identity
+    object: "Customer:bob"
+  - user: "Customer:carol"
+    relation: identity
+    object: "Customer:carol"
+  - user: "Customer:alice"
+    relation: owner
+    object: "Account:acc-alice-savings"
+  - user: "Customer:*"
+    relation: open
+    object: "Account:acc-alice-savings"
+  - user: "Customer:bob"
+    relation: owner
+    object: "Account:acc-bob-checking"
+  - user: "Customer:*"
+    relation: open
+    object: "Account:acc-bob-checking"
+  - user: "Customer:alice"
+    relation: owner
+    object: "Account:acc-alice-bob-joint"
+  - user: "Customer:bob"
+    relation: owner
+    object: "Account:acc-alice-bob-joint"
+  - user: "Customer:*"
+    relation: open
+    object: "Account:acc-alice-bob-joint"
+  - user: "Customer:carol"
+    relation: owner
+    object: "Account:acc-carol-checking"
+  - user: "Customer:*"
+    relation: open
+    object: "Account:acc-carol-checking"
+  - user: "Customer:alice"
+    relation: customer
+    object: "Invoice:inv-alice-0412"
+  - user: "Customer:bob"
+    relation: customer
+    object: "Invoice:inv-bob-0388"
+  - user: "Customer:carol"
+    relation: customer
+    object: "Invoice:inv-carol-0291"
+  - user: "Customer:alice"
+    relation: customer
+    object: "Invoice:inv-alice-0420"
+tests:
+  - name: ownership, joint account, invoices and profiles
+    check:
+      - user: "Customer:alice"
+        object: "Customer:alice"
+        assertions:
+          VIEW_CUSTOMER_PROFILE: true
+      - user: "Customer:alice"
+        object: "Customer:bob"
+        assertions:
+          VIEW_CUSTOMER_PROFILE: false
+      - user: "Customer:alice"
+        object: "Account:acc-alice-savings"
+        assertions:
+          VIEW_ACCOUNT_BALANCE: true
+          TRANSFER_FROM_ACCOUNT: true
+      - user: "Customer:carol"
+        object: "Account:acc-alice-savings"
+        assertions:
+          VIEW_ACCOUNT_BALANCE: false
+          TRANSFER_FROM_ACCOUNT: false
+      - user: "Customer:bob"
+        object: "Account:acc-alice-savings"
+        assertions:
+          VIEW_ACCOUNT_BALANCE: false
+          TRANSFER_FROM_ACCOUNT: false
+      - user: "Customer:bob"
+        object: "Account:acc-alice-bob-joint"
+        assertions:
+          VIEW_ACCOUNT_BALANCE: true
+          TRANSFER_FROM_ACCOUNT: true
+      - user: "Customer:alice"
+        object: "Account:acc-alice-bob-joint"
+        assertions:
+          VIEW_ACCOUNT_BALANCE: true
+          TRANSFER_FROM_ACCOUNT: true
+      - user: "Customer:carol"
+        object: "Account:acc-alice-bob-joint"
+        assertions:
+          VIEW_ACCOUNT_BALANCE: false
+          TRANSFER_FROM_ACCOUNT: false
+      - user: "Customer:alice"
+        object: "Invoice:inv-alice-0420"
+        assertions:
+          VIEW_INVOICE: true
+      - user: "Customer:carol"
+        object: "Invoice:inv-alice-0412"
+        assertions:
+          VIEW_INVOICE: false
+      - user: "Customer:carol"
+        object: "Invoice:inv-carol-0291"
+        assertions:
+          VIEW_INVOICE: true
+    list_objects:
+      - user: "Customer:bob"
+        type: Account
+        assertions:
+          VIEW_ACCOUNT_BALANCE:
+            - "Account:acc-bob-checking"
+            - "Account:acc-alice-bob-joint"

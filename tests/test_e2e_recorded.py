@@ -45,30 +45,30 @@ def gate() -> Iterator[IntentGate]:
     ia.shutdown()
 
 
-@pytest.mark.parametrize(
-    ("caller", "tool", "args", "allowed"),
-    [
-        ("bob", "get_account_balance", {"account_id": "acc-bob-checking"}, True),
-        ("bob", "get_account_balance", {"account_id": "acc-alice-bob-joint"}, True),
-        ("bob", "get_account_balance", {"account_id": "acc-alice-savings"}, False),
-        ("carol", "get_account_balance", {"account_id": "acc-alice-savings"}, False),
-        (
-            "carol",
-            "transfer_funds",
-            {"from_account_id": "acc-alice-savings", "to_account_id": "acc-carol-checking", "amount": "500"},
-            False,
-        ),
-        ("carol", "get_customer_profile", {"customer_id": "alice"}, False),
-        ("alice", "get_invoice", {"invoice_id": "inv-alice-0412"}, True),
-        # the limitation: the caller owns the account, so an injected transfer is allowed
-        (
-            "alice",
-            "transfer_funds",
-            {"from_account_id": "acc-alice-savings", "to_account_id": "acc-carol-checking", "amount": "500"},
-            True,
-        ),
-    ],
-)
+CASES = [
+    ("bob", "get_account_balance", {"account_id": "acc-bob-checking"}, True),
+    ("bob", "get_account_balance", {"account_id": "acc-alice-bob-joint"}, True),
+    ("bob", "get_account_balance", {"account_id": "acc-alice-savings"}, False),
+    ("carol", "get_account_balance", {"account_id": "acc-alice-savings"}, False),
+    (
+        "carol",
+        "transfer_funds",
+        {"from_account_id": "acc-alice-savings", "to_account_id": "acc-carol-checking", "amount": "500"},
+        False,
+    ),
+    ("carol", "get_customer_profile", {"customer_id": "alice"}, False),
+    ("alice", "get_invoice", {"invoice_id": "inv-alice-0412"}, True),
+    # the limitation: the caller owns the account, so an injected transfer is allowed
+    (
+        "alice",
+        "transfer_funds",
+        {"from_account_id": "acc-alice-savings", "to_account_id": "acc-carol-checking", "amount": "500"},
+        True,
+    ),
+]
+
+
+@pytest.mark.parametrize(("caller", "tool", "args", "allowed"), CASES)
 async def test_recorded_decisions(gate: IntentGate, caller: str, tool: str, args: dict, allowed: bool) -> None:
     d = await gate.check(tool, args, Caller("Customer", caller))
     assert d.allowed is allowed, d.reason
