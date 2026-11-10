@@ -9,7 +9,8 @@ It serves three things on one port:
 * ``POST /access/v1/evaluation`` and ``POST /access/v1/evaluations`` - a tiny AuthZEN 1.0
   Policy Decision Point. It does not run Cypher: each policy's condition is re-implemented below
   as an explicit Python rule over ``demo_graph.json``. With a real IndyKite project you point the
-  gate's ``AUTHZEN_PDP_URL`` at IndyKite's own decision endpoint instead.
+  gate at IndyKite's own decision endpoint instead (``PDP_KIND=indykite``), or at another AuthZEN engine
+  such as OpenFGA (``PDP_KIND=openfga``).
 
 Every response carries ``X-Standin: indykite-standin`` so a transcript can never be mistaken for
 a real IndyKite decision.

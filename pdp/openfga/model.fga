@@ -1,0 +1,28 @@
+# The demo's four policies as an OpenFGA model (OpenFGA modeling language, schema 1.1).
+# Same rules as standins/demo_policies.json (IndyKite KBAC, Cypher) and standins/indykite_standin.py:
+#   VIEW_CUSTOMER_PROFILE  a customer may view their own profile
+#   VIEW_ACCOUNT_BALANCE   a customer may view the balance of an account they OWN (joint accounts: every owner)
+#   TRANSFER_FROM_ACCOUNT  a customer may move money out of an account they OWN that is open
+#   VIEW_INVOICE           a customer may view an invoice they HAVE
+# Type and relation names are exactly what intent-agent emits (from the canbank schema), so its
+# AuthZEN evaluations go to OpenFGA unchanged: action.name is the relation, resource.type the type.
+# "self" is reserved in OpenFGA, so the profile relation is called "identity".
+model
+  schema 1.1
+
+type Customer
+  relations
+    define identity: [Customer]
+    define VIEW_CUSTOMER_PROFILE: identity
+
+type Account
+  relations
+    define owner: [Customer]
+    define open: [Customer:*]
+    define VIEW_ACCOUNT_BALANCE: owner
+    define TRANSFER_FROM_ACCOUNT: owner and open
+
+type Invoice
+  relations
+    define customer: [Customer]
+    define VIEW_INVOICE: customer

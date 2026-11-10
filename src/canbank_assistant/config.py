@@ -6,14 +6,14 @@ import os
 from dataclasses import dataclass
 from typing import Any
 
+from intent_gate.pdp import PdpConfig, pdp_from_env
+
 
 @dataclass(frozen=True)
 class Settings:
     intent_agent_url: str
     intent_agent_token: str
-    pdp_url: str
-    pdp_token: str
-    pdp_client_key: str
+    pdp: PdpConfig
     model: str
     provider: dict[str, Any] | None
     gate_timeout_seconds: float
@@ -31,9 +31,7 @@ class Settings:
         return cls(
             intent_agent_url=os.environ.get("INTENT_AGENT_URL", "http://127.0.0.1:6003/"),
             intent_agent_token=os.environ.get("INTENT_AGENT_TOKEN", ""),
-            pdp_url=os.environ.get("AUTHZEN_PDP_URL", "http://127.0.0.1:9002"),
-            pdp_token=os.environ.get("AUTHZEN_PDP_TOKEN", ""),
-            pdp_client_key=os.environ.get("AUTHZEN_PDP_CLIENT_KEY", ""),
+            pdp=pdp_from_env(os.environ),
             model=os.environ.get("MODEL", "gpt-4.1-mini"),
             provider=provider,
             gate_timeout_seconds=float(os.environ.get("GATE_TIMEOUT_SECONDS", "20")),

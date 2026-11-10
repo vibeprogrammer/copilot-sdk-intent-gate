@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.1",
+  "type_definitions": [
+    {
+      "metadata": {
+        "relations": {
+          "VIEW_CUSTOMER_PROFILE": {},
+          "identity": {
+            "directly_related_user_types": [
+              {
+                "type": "Customer"
+              }
+            ]
+          }
+        }
+      },
+      "relations": {
+        "VIEW_CUSTOMER_PROFILE": {
+          "computedUserset": {
+            "relation": "identity"
+          }
+        },
+        "identity": {
+          "this": {}
+        }
+      },
+      "type": "Customer"
+    },
+    {
+      "metadata": {
+        "relations": {
+          "TRANSFER_FROM_ACCOUNT": {},
+          "VIEW_ACCOUNT_BALANCE": {},
+          "open": {
+            "directly_related_user_types": [
+              {
+                "type": "Customer",
+                "wildcard": {}
+              }
+            ]
+          },
+          "owner": {
+            "directly_related_user_types": [
+              {
+                "type": "Customer"
+              }
+            ]
+          }
+        }
+      },
+      "relations": {
+        "TRANSFER_FROM_ACCOUNT": {
+          "intersection": {
+            "child": [
+              {
+                "computedUserset": {
+                  "relation": "owner"
+                }
+              },
+              {
+                "computedUserset": {
+                  "relation": "open"
+                }
+              }
+            ]
+          }
+        },
+        "VIEW_ACCOUNT_BALANCE": {
+          "computedUserset": {
+            "relation": "owner"
+          }
+        },
+        "open": {
+          "this": {}
+        },
+        "owner": {
+          "this": {}
+        }
+      },
+      "type": "Account"
+    },
+    {
+      "metadata": {
+        "relations": {
+          "VIEW_INVOICE": {},
+          "customer": {
+            "directly_related_user_types": [
+              {
+                "type": "Customer"
+              }
+            ]
+          }
+        }
+      },
+      "relations": {
+        "VIEW_INVOICE": {
+          "computedUserset": {
+            "relation": "customer"
+          }
+        },
+        "customer": {
+          "this": {}
+        }
+      },
+      "type": "Invoice"
+    }
+  ]
+}

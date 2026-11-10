@@ -16,13 +16,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "anyio>=4", "ruff>=0.8"]
+dev = ["pytest>=8", "anyio>=4", "ruff>=0.8", "pyyaml>=6"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = ["openfga: needs a running OpenFGA (OPENFGA_API_URL); the openfga CI job runs these"]
 
 [tool.ruff]
 line-length = 120
