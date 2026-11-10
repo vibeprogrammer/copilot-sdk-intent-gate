@@ -1,0 +1,49 @@
+# intent-agent (IndyKite's published image) + the local stand-ins. The assistant itself runs on
+# your machine (it needs the Copilot runtime): see README "Quick start".
+# Needs GEMINI_API_KEY in .env (copy .env.example). Nothing here talks to IndyKite.
+services:
+  indykite-standin:      # STAND-IN for the IndyKite platform: schema, policies, AuthZEN PDP
+    image: python:3.13-slim
+    working_dir: /app
+    volumes: ["./standins:/app/standins:ro"]
+    command: ["python", "-m", "standins.indykite_standin", "--host", "0.0.0.0", "--port", "9002"]
+    environment:
+      IK_APP_AGENT_KEY: ${IK_APP_AGENT_KEY:?copy .env.example to .env}
+    ports: ["9002:9002"]
+
+  introspect:            # STAND-IN token introspection (any non-empty token is active)
+    image: python:3.13-slim
+    working_dir: /app
+    volumes: ["./standins:/app/standins:ro"]
+    command: ["python", "-m", "standins.mock_introspect"]
+    environment:
+      INTROSPECT_HOST: 0.0.0.0
+
+  intent-agent:          # REAL: IndyKite intent-agent, unmodified
+    image: docker.io/indykite/intent-agent:1.1.0
+    depends_on: [indykite-standin, introspect]
+    ports: ["6003:6003", "8001:8001"]
+    environment:
+      INTENT_PORT: "6003"
+      HEALTH_PORT: "8001"
+      BIND_HOST: 0.0.0.0
+      ADVERTISED_URL: http://localhost:6003
+      INTENT_AGENT_NAME: intent_agent
+      LOG_LEVEL: INFO
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?set GEMINI_API_KEY in .env}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash-lite}
+      LLM_TIMEOUT_SECONDS: "8.0"
+      REQUEST_TIMEOUT_SECONDS: "20.0"
+      INDYKITE_BASE_URL: http://indykite-standin:9002
+      IK_APP_AGENT_KEY: ${IK_APP_AGENT_KEY}
+      INTROSPECT_URL: http://introspect:9001/introspect
+      INTROSPECT_CLIENT_ID: local
+      INTROSPECT_CLIENT_SECRET: local
+      CACHE_BACKEND: memory
+      AUDIT_DELIVERY: file
+      AUDIT_ASYNC: "false"
+      AUDIT_FILE_STORAGE_PATH: /tmp/audit
+      AUDIT_FILE_FORMAT: json
+      AUDIT_FILE_ROTATION_STRATEGY: size-and-time
+      AUDIT_FILE_ROTATION_INTERVAL_SECONDS: "86400"
+      AUDIT_FILE_ROTATION_MAX_BYTES: "104857600"

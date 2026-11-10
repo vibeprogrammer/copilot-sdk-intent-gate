@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "copilot-sdk-intent-gate"
+version = "0.1.0"
+description = "Experimental: authorize every GitHub Copilot SDK tool call through IndyKite's intent-agent and an AuthZEN decision"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    "github-copilot-sdk>=1.0.30,<2",
+    "httpx>=0.27",
+    "pydantic>=2.11",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "anyio>=4", "ruff>=0.8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "BLE", "PL", "RUF", "ANN"]
+ignore = ["PLR2004", "ANN401", "S101", "PLC0415", "RUF001", "PLR0911", "ASYNC109"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN", "S", "PLR0913"]
+"scripts/*" = ["E402", "PLR0913"]
+"standins/*" = ["S104"]
